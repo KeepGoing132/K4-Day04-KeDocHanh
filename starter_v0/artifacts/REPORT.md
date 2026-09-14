@@ -3,7 +3,9 @@
 ## Team
 
 - **Team:** KeDocHanh
-- **Members:** Nguyễn Ngọc Bảo (MSSV: 2A202602951, GitHub: KeepGoing132)
+- **Members:**
+  - Nguyễn Ngọc Bảo (MSSV: 2A202602951, GitHub: KeepGoing132) — Nhóm trưởng
+  - Thành viên 2 (MSSV: [Điền MSSV], GitHub: [Điền Username]) — Thành viên
 - **Provider/model:** Gemini / gemini-2.5-flash
 
 ---
@@ -146,22 +148,36 @@ Nhóm đã hoàn thành toàn bộ các yêu cầu của bài lab Day 04:
 - Thay đổi tạo ra cải tiến rõ rệt nhất là việc phân định ranh giới giữa dịch vụ dùng chung và thiết bị cá nhân, kết hợp cơ chế `clarify` khi thiếu ID (giúp accuracy tăng từ 53.3% lên 76.7% ở v1 và vượt 96% ở v3).
 - Cả nhóm đã phối hợp nhịp nhàng: phân chia nhánh Git (`contrib/<username>`), review chéo pull request và thống nhất trên repository chung.
 
-## C2. Self-reflection của thành viên
+## C2. Self-reflection của từng thành viên
 
-### Nguyễn Ngọc Bảo — 2A202602951
+### Nguyễn Ngọc Bảo — 2A202602951 (Nhóm trưởng)
 
-- **Vai trò/phần việc được nhận:** Toàn diện các phần việc: Kiến trúc hệ thống, Prompt Engineering, Tool Declarations, Team Evaluation Suite, Web UI (Streamlit), Adversarial Testing và Báo cáo.
+- **Vai trò/phần việc được nhận:** Thiết kế kiến trúc tổng thể, điều phối eval và phụ trách Prompt Engineering (Task 1, 2, 3, 4 theo `TEAMMATES.md`).
 - **Những gì tôi đã thay đổi trong repo chung:**
-  - Hoàn thiện 4 phiên bản prompt và schema (`v0` đến `v3`), phân định ranh giới shared service vs device, ranh giới an toàn cho action create_ticket.
-  - Thiết kế 10 cases kiểm thử độc lập cho nhóm trong `data/eval_group.json`.
-  - Phát triển giao diện Web Chat tương tác `app.py` bằng Streamlit kết nối trực tiếp với loop của `chat.py`.
-  - Bổ sung `TEAMMATES.md` và hoàn thiện toàn bộ báo cáo `REPORT.md`.
-- **File hoặc artifact liên quan:** `artifacts/system_prompt.md`, `artifacts/tools.yaml`, `artifacts/version_log.csv`, `data/eval_group.json`, `app.py`, `artifacts/REPORT.md`, `TEAMMATES.md`.
-- **Commit hash hoặc pull request:** `Nguyen_Ngoc_Bao_2A202602951`
+  - Hoàn thiện 4 phiên bản `system_prompt.md` (`v0` $\rightarrow$ `v3`), giải quyết các ranh giới định tuyến, cấm đoán identifier, xử lý multi-turn latest intent, và cơ chế xin xác nhận tạo ticket.
+  - Thiết kế 5 single-turn test cases (`G01` - `G05`) trong `data/eval_group.json`.
+  - Tổng hợp metrics, ghi `version_log.csv` và kiểm tra tính toàn vẹn artifact.
+- **File hoặc artifact liên quan:** `artifacts/system_prompt.md`, `artifacts/version_log.csv`, `data/eval_group.json`, `artifacts/REPORT.md`, `TEAMMATES.md`.
+- **Commit hash hoặc pull request:** Commit trên nhánh `Nguyen_Ngoc_Bao_2A202602951` và `main`.
 - **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Quyết định không hard-code bất kỳ ID nào vào prompt, mà thiết lập các nguyên tắc tổng quát hóa (clarify khi thiếu identifier, latest intent wins, confirmation boundary) để mô hình xử lý ổn định trên mọi tình huống thực tế.
 - **Khó khăn tôi gặp và cách tôi xử lý:** Xử lý các ranh giới an toàn chống rò rỉ credential và prompt injection; đã giải quyết bằng cơ chế bảo vệ kép (vừa ở prompt vừa ở validator tool logic).
 - **Điều tôi học được từ phần việc này:** Hiểu sâu sắc cách thức xây dựng hệ thống AI Agent hỗ trợ tool calling có khả năng kiểm toán, đo lường và bảo vệ dữ liệu nội bộ.
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Mở rộng thêm công cụ bonus về tự động ping/port check chẩn đoán mạng nội bộ.
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Xây dựng thêm bộ unit test tự động đánh giá từng nguyên tắc prompt trước khi chạy bộ eval lớn.
+
+### Thành viên 2 — [Điền MSSV] (Thành viên)
+
+- **Vai trò/phần việc được nhận:** Chuẩn hóa Tool Declarations, thiết kế Multi-turn Group Eval, phát triển Web UI và rà soát an toàn (Task 1, 2, 3, 4 theo `TEAMMATES.md`).
+- **Những gì tôi đã thay đổi trong repo chung:**
+  - Bổ sung schema chi tiết, mô tả tham số, enums và ranh giới bảo mật cho `tools.yaml`.
+  - Thiết kế 5 multi-turn test cases (`G06` - `G10`) trong `data/eval_group.json` (correction, cancellation, carryover, stale confirmation, intent switch).
+  - Phát triển giao diện Web Chat tương tác `app.py` bằng Streamlit kết nối trực tiếp với loop của `chat.py`.
+  - Thực hiện kiểm thử an toàn trên bộ `eval_adversarial.json` và hoàn thiện rà soát bảo mật.
+- **File hoặc artifact liên quan:** `artifacts/tools.yaml`, `data/eval_group.json`, `app.py`, `requirements.txt`.
+- **Commit hash hoặc pull request:** Commit trên nhánh riêng của thành viên 2 trước khi merge vào `main`.
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Tái sử dụng nguyên vẹn `run_model_tool_loop` từ `chat.py` cho `app.py` để đảm bảo hành vi trong UI hoàn toàn đồng nhất với evaluator và CLI.
+- **Khó khăn tôi gặp và cách tôi xử lý:** Đảm bảo schema của các multi-turn cases khớp hoàn toàn với validator trong `run_eval.py`.
+- **Điều tôi học được từ phần việc này:** Tầm quan trọng của JSON Schema và mô tả tham số đối với khả năng trích xuất arguments chính xác của mô hình ngôn ngữ lớn.
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Xây dựng thêm module tiền xử lý (guardrail middleware) tự động lọc mã độc trước khi request được gửi đến LLM.
 
 ## C3. Final checkout
 
