@@ -1,7 +1,299 @@
 {
   "dataset_id": "day04_v3_helpdesk_group",
   "dataset_role": "group",
-  "description": "Template intentionally left empty. The team must write exactly 10 original IT helpdesk cases: 5 single-turn query cases and 5 multi-turn turns cases.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "Original IT helpdesk evaluation suite designed by the team: 5 single-turn and 5 multi-turn cases.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_missing_asset_clarify",
+      "phase": "B",
+      "suite": "group",
+      "query": "Màn hình laptop làm việc của tôi bị chớp giật liên tục, IT kiểm tra giúp với.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_missing_asset",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu kiểm tra thiết bị nhưng không cung cấp Asset ID phải gọi clarify, không được đoán mã máy."
+      }
+    },
+    {
+      "id": "G02_parallel_wifi_service_device",
+      "phase": "B",
+      "suite": "group",
+      "query": "Dịch vụ Wi-Fi văn phòng đang chập chờn; kiểm tra giúp tình trạng Wi-Fi production và card mạng của máy LT-318.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "wifi",
+              "environment": "production"
+            }
+          },
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "network"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_service_and_device",
+        "difficulty": "hard",
+        "what_it_tests": "Một yêu cầu cần kết hợp cả trạng thái dịch vụ dùng chung và chẩn đoán phần cứng máy con."
+      }
+    },
+    {
+      "id": "G03_policy_vs_kb_boundary",
+      "phase": "B",
+      "suite": "group",
+      "query": "Cho tôi biết chính sách công ty về việc sử dụng các công cụ AI và dịch vụ bên ngoài.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "policy",
+            "args": {
+              "policy_area": "external_tools"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "policy_routing",
+        "difficulty": "medium",
+        "what_it_tests": "Câu hỏi về quy định và chính sách công ty phải route sang policy, không tra cứu KB hướng dẫn kỹ thuật."
+      }
+    },
+    {
+      "id": "G04_format_only_incident",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tổng hợp các phát hiện sau thành báo cáo tóm tắt tên 'Sự cố SSO': SSO production timeout 504; 3 nhân viên không đăng nhập được.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "template": "brief",
+              "incident_title": "Sự cố SSO"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "format_existing_findings",
+        "difficulty": "medium",
+        "what_it_tests": "Khi đã có sẵn findings thì chỉ dùng format_incident_report với template brief, không gọi lại tool chẩn đoán."
+      }
+    },
+    {
+      "id": "G05_out_of_scope_travel",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tư vấn cho tôi lịch trình du lịch Đà Nẵng 3 ngày 2 đêm tự túc.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu hoàn toàn ngoài phạm vi IT service desk không được gọi bất kỳ tool nào."
+      }
+    },
+    {
+      "id": "G06_multiturn_asset_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra phần cứng laptop LT-204 giúp tôi."
+        },
+        {
+          "role": "user",
+          "content": "À tôi nhìn nhầm nhãn máy, máy đúng là LT-318."
+        },
+        {
+          "role": "user",
+          "content": "Tiến hành kiểm tra phần cứng của máy đó nhé."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "hardware"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Thông tin Asset ID đính chính ở lượt sau phải ghi đè mã máy cũ từ lượt trước."
+      }
+    },
+    {
+      "id": "G07_multiturn_cancel_ticket",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket sự cố hỏng bàn phím cho máy DT-031."
+        },
+        {
+          "role": "user",
+          "content": "Thôi tôi vừa cắm lại dây USB thì bàn phím nhận rồi, hủy yêu cầu nhé."
+        },
+        {
+          "role": "user",
+          "content": "Xác nhận bạn đã hiểu việc hủy yêu cầu."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancellation",
+        "difficulty": "hard",
+        "what_it_tests": "Yêu cầu hủy hành động ở lượt sau phải hủy hoàn toàn việc tạo ticket hoặc clarify."
+      }
+    },
+    {
+      "id": "G08_multiturn_environment_carry",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra hệ thống SSO môi trường staging."
+        },
+        {
+          "role": "user",
+          "content": "Thế còn dịch vụ in ấn (printing) thì sao?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ kiểm tra printing trên staging nhé."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "printing",
+              "environment": "staging"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_environment_carryover",
+        "difficulty": "hard",
+        "what_it_tests": "Giữ đúng môi trường staging từ lượt trước khi chuyển sang kiểm tra dịch vụ khác."
+      }
+    },
+    {
+      "id": "G09_multiturn_stale_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi xác nhận tạo ticket lỗi màn hình máy LT-240 mức low."
+        },
+        {
+          "role": "user",
+          "content": "Đợi chút, màn hình bốc khói nhẹ, nâng priority lên critical ngay."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra lại và xin xác nhận với thông tin mới trước khi gửi."
+        }
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "confirmation_invalidated",
+        "difficulty": "hard",
+        "what_it_tests": "Khi payload thay đổi (priority low -> critical), xác nhận cũ mất hiệu lực, phải hỏi lại xác nhận."
+      }
+    },
+    {
+      "id": "G10_multiturn_switch_intent",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra kết nối mạng của laptop LT-204."
+        },
+        {
+          "role": "user",
+          "content": "Không cần xem máy nữa, đồng nghiệp nhờ tra danh bạ."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tra cứu thông tin nhân viên EMP-1005."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup_user",
+            "args": {
+              "employee_id": "EMP-1005"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_intent_switch",
+        "difficulty": "medium",
+        "what_it_tests": "Ý định mới ở lượt sau thay thế hoàn toàn ý định cũ, không gọi inspect_device từ lượt trước."
+      }
+    }
+  ]
 }
