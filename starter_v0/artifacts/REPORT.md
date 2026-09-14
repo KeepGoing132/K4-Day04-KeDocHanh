@@ -5,7 +5,7 @@
 - **Team:** KeDocHanh
 - **Members:**
   - Nguyễn Ngọc Bảo (MSSV: 2A202602951, GitHub: KeepGoing132) — Nhóm trưởng
-  - Thành viên 2 (MSSV: [Điền MSSV], GitHub: [Điền Username]) — Thành viên
+  - Nguyễn Phú Bình (MSSV: 2A202602410, GitHub: binhbadao05) — Thành viên
 - **Provider/model:** Gemini / gemini-2.5-flash
 
 ---
@@ -164,7 +164,7 @@ Nhóm đã hoàn thành toàn bộ các yêu cầu của bài lab Day 04:
 - **Điều tôi học được từ phần việc này:** Hiểu sâu sắc cách thức xây dựng hệ thống AI Agent hỗ trợ tool calling có khả năng kiểm toán, đo lường và bảo vệ dữ liệu nội bộ.
 - **Nếu làm lại, tôi sẽ cải thiện điều gì:** Xây dựng thêm bộ unit test tự động đánh giá từng nguyên tắc prompt trước khi chạy bộ eval lớn.
 
-### Thành viên 2 — [Điền MSSV] (Thành viên)
+### Nguyễn Phú Bình — 2A202602410 (Thành viên)
 
 - **Vai trò/phần việc được nhận:** Chuẩn hóa Tool Declarations, thiết kế Multi-turn Group Eval, phát triển Web UI và rà soát an toàn (Task 1, 2, 3, 4 theo `TEAMMATES.md`).
 - **Những gì tôi đã thay đổi trong repo chung:**
